@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">nfcreaderwriter</string>
+    <string name="app_name">NFC ReaderWriter</string>
+
+    <!-- Dropdown options -->
+    <string-array name="user_types">
+        <item>Student</item>
+        <item>Regular Passenger</item>
+    </string-array>
 </resources>

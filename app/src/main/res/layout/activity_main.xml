@@ -118,19 +118,37 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
 
+                <!-- Name -->
                 <EditText
-                    android:id="@+id/writeDataEdit"
+                    android:id="@+id/editName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="80dp"
-                    android:hint="Enter text to write to NFC tag"
+                    android:hint="Enter Name"
                     android:textSize="14sp"
                     android:padding="12dp"
                     android:background="@android:drawable/edit_text"
                     android:layout_marginBottom="12dp"
-                    android:gravity="top|start"
-                    android:inputType="textMultiLine"
-                    android:maxLines="5" />
+                    android:inputType="textPersonName" />
+
+                <!-- Balance -->
+                <EditText
+                    android:id="@+id/editBalance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Balance"
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_marginBottom="12dp"
+                    android:inputType="numberDecimal" />
+
+                <!-- Type -->
+                <Spinner
+                    android:id="@+id/spinnerType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:entries="@array/user_types" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -187,7 +205,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• To READ: Simply bring an NFC tag close to your device\n• To WRITE: Enter text above, tap 'Write to NFC', then bring the tag close to your device\n• Make sure NFC is enabled in your device settings\n• Works with NDEF compatible NFC tags"
+                    android:text="• To READ: Simply bring an NFC tag close to your device\n• To WRITE: Fill in Name, Balance, and Type, then tap 'Write to NFC' and bring the tag close to your device\n• Make sure NFC is enabled in your device settings\n• Works with NDEF compatible NFC tags"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
 
