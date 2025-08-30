@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class ApiClient {
 
     // 🔹 Replace with your PC's local IP and backend port
-    private static final String BASE_URL = "http://192.168.100.10:5000/api/users";
+    private static final String BASE_URL = "http://192.168.100.10:5000/api";
     private static final String TAG = "ApiClient";
 
     public static void sendUser(String rfid, String name, String balance, String type) {
@@ -29,7 +29,7 @@ public class ApiClient {
                 Log.d(TAG, "Sending JSON: " + json.toString());
 
                 // Use PUT method to update/create user by RFID
-                URL url = new URL(BASE_URL + "/" + rfid);
+                URL url = new URL(BASE_URL + "/users/" + rfid);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("PUT");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -61,6 +61,54 @@ public class ApiClient {
 
             } catch (Exception e) {
                 Log.e(TAG, "❌ Error sending user data", e);
+            } finally {
+                if (conn != null) conn.disconnect();
+            }
+        }).start();
+    }
+
+    public static void sendTap(String rfid) {
+        new Thread(() -> {
+            HttpURLConnection conn = null;
+            try {
+                JSONObject json = new JSONObject();
+                json.put("rfid", rfid);
+                json.put("timestamp", System.currentTimeMillis());
+
+                Log.d(TAG, "Sending tap JSON: " + json.toString());
+
+                URL url = new URL(BASE_URL + "/tap");
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+                conn.setConnectTimeout(10000); // 10 seconds timeout
+                conn.setReadTimeout(10000); // 10 seconds timeout
+
+                OutputStream os = conn.getOutputStream();
+                os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+                os.flush();
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+                Log.d(TAG, "Tap response code: " + responseCode);
+
+                InputStream is = responseCode < HttpURLConnection.HTTP_BAD_REQUEST ? conn.getInputStream() : conn.getErrorStream();
+                StringBuilder sb = new StringBuilder();
+                int ch;
+                while ((ch = is.read()) != -1) sb.append((char) ch);
+                is.close();
+
+                Log.d(TAG, "Tap response body: " + sb.toString());
+
+                if (responseCode >= 200 && responseCode < 300) {
+                    Log.d(TAG, "✅ Tap data sent successfully!");
+                } else {
+                    Log.e(TAG, "❌ Server returned tap error: " + responseCode);
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "❌ Error sending tap data", e);
             } finally {
                 if (conn != null) conn.disconnect();
             }
